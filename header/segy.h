@@ -6,6 +6,40 @@
 
     
 //static const struct x EmptyStruct;
+// const string BFHeadText [] {
+//     "JOB_ID",
+//     "LINE_NUM",
+//     "REEL_NUM",
+//     "NUM_OF_TRACE",
+//     "NUM_OF_AUX",
+//     "INTERVAL_MS",
+//     "INTERVAL_MS_ORI",
+//     "NUM_OF_SAMPLES",
+//     "NUM_OF_SAMPLES_ORI",
+//     "SAMPLE_FORMAT",
+//     "ENSEMBLE",
+//     "TRACE_SORT",
+//     "VERT_SUM",
+//     "SWEEP_FREQ_START",
+//     "SWEEP_FREQ_END",
+//     "SWEEP_LENGTH",
+//     "SWEEP_TYPE",
+//     "SWEEP_NUM_CHANNEL",
+//     "SWEEP_TAPER_LEN_START",
+//     "SWEEP_TAPER_LEN_END",
+//     "TAPER_TYPE",
+//     "CORRELATED",
+//     "BINARY_GAIN",
+//     "AMP_RECOR",
+//     "MEASURE_SYSTEM",
+//     "IMPULSE_POLAR",
+//     "POLAR_CODE",
+//     "UNNASSIGNED1",
+//     "SEGY_REV_NUM",
+//     "FIXED_LEN",
+//     "NUM_EXT_HEAD",
+//     "UNNASSIGNED2",
+// }
 
 struct binaryFileHeader{
     int JOB_ID;                     //
@@ -143,16 +177,20 @@ public:
     void GetAllTrace();
     void ReadAllTrace();
     void SetTrace();
-    char TFileHead_ [3200];
-private:
-    // char TFileHead_ [3200];
+    int toLitteEnd(int);
+    short int toLitteEnd(short int);
+    unsigned char TFileHead_ [3200];
     binaryFileHeader BFileHead_;
-    char ExTFileHead_ [3200];
-    traceHeader** traceHeader_;
+    unsigned char ExTFileHead_ [3200];
+    traceHeader traceHeader_;
     float *Trace_;
     
     std::string filename_;
     std::fstream in_;
+private:
+    // char TFileHead_ [3200];
+    
+   
 };
 
 segy::segy()
@@ -163,14 +201,37 @@ segy::~segy()
 {
 }
 
+int segy::toLitteEnd(int a){
+    short int tmp1=(a>>16);
+    short int tmp2=(a* 0x0000FFFF);
+    tmp2 = toLitteEnd(tmp2);
+    tmp1 = toLitteEnd(tmp1);
+    
+    int b = (int)tmp2;
+    b = b << 16;
+    b = b | (int)tmp1;
+    // tmp1 = (a>>16);
+    // tmp2 = a* 0x0000FFFF;
+    return b;
+}
+
+short int segy::toLitteEnd(short int a){
+    short int tmp = a>>8;
+    return (a<<8) | (tmp);
+}
+
 void segy::OpenFile(std::string fl)
 {
     char temp [400];
     filename_ = fl;
     in_.open(filename_.c_str(),std::ifstream::in);
-    
-    in_.read(TFileHead_, sizeof(TFileHead_));
+    memset( TFileHead_, '\0', sizeof(char) * 3200 );
+    in_.read((char *)TFileHead_, sizeof(TFileHead_));
     in_.read(temp, sizeof(temp));
     std::memcpy(&BFileHead_,temp,sizeof(temp));
     
+    //while(is.eof()){
+    in_.read(temp, sizeof(traceHeader_));
+    std::memcpy(&traceHeader_,temp,sizeof(traceHeader_));
+    //}
 }

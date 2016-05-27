@@ -22,19 +22,53 @@
 };
 
 int main () {
-	std::cout << sizeof(binaryFileHeader) << " "<< sizeof(segy) << " "<< sizeof(traceHeader);
+	std::cout << sizeof(binaryFileHeader) << " "<< sizeof(segy) << " "<< sizeof(traceHeader)<< std::endl;
 	
 	segy sgy;
-	sgy.OpenFile("../../../velocity.segy");
+	sgy.OpenFile("velocity.segy");
 	
-	std::cout << sgy.TFileHead_[1];
+	// std::cout << sgy.TFileHead_[1];
 	
 
 
 
-    for (size_t i = 0; i < 3200; i++)
-	{
-		std::cout << e2a[(int) (sgy.TFileHead_[i])];
-	} 
+    // for (size_t i = 0; i < 400; i++)
+	// {
+	// 	// std::cout << e2a[(int) (sgy.TFileHead_[i])];
+    //     printf("%i", sgy.BFileHead_.JOB_ID);
+	// } 
+    
+    // printf("%i \n", sgy.BFileHead_.JOB_ID              );
+    // printf("%i \n", sgy.BFileHead_.LINE_NUM    );
+    // printf("%i \n", sgy.BFileHead_.REEL_NUM    );
+    // printf("%hi \n", sgy.BFileHead_.NUM_OF_TRACE    );
+    // printf("%hi \n", sgy.BFileHead_.NUM_OF_AUX  );
+    printf("%hi \n", sgy.toLitteEnd(sgy.BFileHead_.INTERVAL_MS)     );
+    printf("%hi \n", sgy.toLitteEnd(sgy.traceHeader_.TRACE_SEQ_GLOBAL)     );
+    printf("%hi \n", sgy.toLitteEnd(sgy.traceHeader_.SCALE_COOR)     );
+    // printf("%hi \n", sgy.BFileHead_.INTERVAL_MS_ORI     );
+    // printf("%hi \n", sgy.BFileHead_.NUM_OF_SAMPLES  );
+    // printf("%hi \n", sgy.BFileHead_.NUM_OF_SAMPLES_ORI  );
+    // printf("%hi \n", sgy.BFileHead_.SAMPLE_FORMAT   );
+    // printf("%hi \n", sgy.BFileHead_.ENSEMBLE    );
+    // printf("%hi \n", sgy.BFileHead_.TRACE_SORT  );
+    // printf("%hi \n", sgy.BFileHead_.VERT_SUM    );
+    // printf("%hi \n", sgy.BFileHead_.SWEEP_FREQ_START    );
+    // printf("%hi \n", sgy.BFileHead_.SWEEP_FREQ_END  );
+    // printf("%hi \n", sgy.BFileHead_.SWEEP_LENGTH    );
+    // printf("%hi \n", sgy.BFileHead_.SWEEP_TYPE  );
+    // printf("%hi \n", sgy.BFileHead_.SWEEP_NUM_CHANNEL   );
+    // printf("%hi \n", sgy.BFileHead_.SWEEP_TAPER_LEN_START   );
+    // printf("%hi \n", sgy.BFileHead_.SWEEP_TAPER_LEN_END     );
+    // printf("%hi \n", sgy.BFileHead_.TAPER_TYPE  );
+    // printf("%hi \n", sgy.BFileHead_.CORRELATED  );
+    // printf("%hi \n", sgy.BFileHead_.BINARY_GAIN     );
+    // printf("%hi \n", sgy.BFileHead_.AMP_RECOR   );
+    // printf("%hi \n", sgy.BFileHead_.MEASURE_SYSTEM  );
+    // printf("%hi \n", sgy.BFileHead_.IMPULSE_POLAR   );
+    // printf("%hi \n", sgy.BFileHead_.POLAR_CODE  );
+    // printf("%hi \n", sgy.BFileHead_.SEGY_REV_NUM    );
+    // printf("%hi \n", sgy.BFileHead_.FIXED_LEN   );
+    // printf("%hi \n", sgy.BFileHead_.NUM_EXT_HEAD    );
     
 }
